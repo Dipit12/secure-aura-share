@@ -64,5 +64,5 @@ For example:
 - **Amazon DynamoDB** → Policies, logs, metadata  
 - **Amazon SES/SNS** → OTP for step-up authentication  
 - **Amazon CloudWatch** → Logging & monitoring  
-
+- **Amazon Cognito** → User Authentication
 

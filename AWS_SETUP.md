@@ -127,22 +127,24 @@ aws dynamodb create-table \
 
 ## Step 4: Configure Environment Variables
 
-Create a `.env.local` file in the project root:
+Create a `.env` file in the project root:
+
+**Important:** Vite requires environment variables to be prefixed with `VITE_` to be exposed to the client.
 
 ```env
 # AWS Configuration
-AWS_REGION=us-east-1
-AWS_ACCESS_KEY_ID=your_access_key_here
-AWS_SECRET_ACCESS_KEY=your_secret_key_here
-AWS_S3_BUCKET=your-secureshare-bucket
+VITE_AWS_REGION=us-east-1
+VITE_AWS_ACCESS_KEY_ID=your_access_key_here
+VITE_AWS_SECRET_ACCESS_KEY=your_secret_key_here
+VITE_AWS_S3_BUCKET=your-secureshare-bucket
 
 # DynamoDB Tables
-AWS_DYNAMODB_FILES_TABLE=caac-files
-AWS_DYNAMODB_LOGS_TABLE=caac-logs
-AWS_DYNAMODB_POLICIES_TABLE=caac-policies
+VITE_AWS_DYNAMODB_FILES_TABLE=caac-files
+VITE_AWS_DYNAMODB_LOGS_TABLE=caac-logs
+VITE_AWS_DYNAMODB_POLICIES_TABLE=caac-policies
 ```
 
-**Note:** Make sure `.env.local` is in your `.gitignore` file to avoid committing sensitive credentials.
+**Note:** Make sure `.env` is in your `.gitignore` file to avoid committing sensitive credentials.
 
 ## Step 5: Test the Setup
 
@@ -191,8 +193,9 @@ For production authentication, set up Amazon Cognito:
 - Check IAM permissions for DynamoDB
 
 ### "AWS not configured" message
-- Ensure `.env.local` file exists with correct values
+- Ensure `.env` file exists with correct `VITE_` prefixed values
 - Restart the development server after adding credentials
+- Verify all environment variables have the `VITE_` prefix
 
 ## Support
 

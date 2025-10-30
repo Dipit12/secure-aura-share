@@ -1,73 +1,71 @@
-# Welcome to your Lovable project
+# 🛡️ Context-Aware Access Control (CAAC) System
 
-## Project info
+## 📌 Overview
+The **Context-Aware Access Control (CAAC) System** is a secure file sharing platform that ensures files can only be accessed under **trusted conditions**.  
+Unlike traditional systems that grant access solely on login credentials, CAAC evaluates **contextual factors** such as:
 
-**URL**: https://lovable.dev/projects/addc14d0-9326-4c18-944e-9379ace2e15b
+- 🌍 IP Address & Geolocation  
+- ⏰ Time of Access  
+- 💻 Device Fingerprint (trusted vs untrusted devices)  
+- 📊 User Behavior & Risk Scoring  
 
-## How can I edit this code?
+This means even if a user’s credentials are stolen, attackers **cannot access files** unless the request matches the expected context.  
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## 🎯 Why?
+Traditional authentication systems are vulnerable to:
+- Password leaks
+- Credential reuse
+- Insider threats
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/addc14d0-9326-4c18-944e-9379ace2e15b) and start prompting.
+CAAC strengthens security by adding **adaptive, policy-driven access control**.  
+For example:
+- Access denied if login comes from outside an allowed country.  
+- Require OTP if accessing files at unusual hours.  
+- Block new devices until verified.  
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## ⚙️ How it Works
+1. **User Authentication**  
+   - Users authenticate using JWT or AWS Cognito.  
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+2. **Context Collection (Frontend + Backend)**  
+   - Frontend captures device fingerprint & sends it with every request.  
+   - Backend collects IP, User-Agent, time, and geo-location.  
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+3. **Policy Evaluation**  
+   - Policies are stored in DynamoDB (e.g., “Confidential files accessible only 9 AM–6 PM from India”).  
+   - A Policy Engine evaluates the current request context against these rules.  
 
-Follow these steps:
+4. **Decision Engine**  
+   - ✅ Allow → Generate presigned S3 URL for file access.  
+   - ⚠️ Step-up Auth → Ask for OTP (via email/SMS).  
+   - ❌ Deny → Block and log the attempt.  
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🏗️ Tech Stack
+**Frontend (React + TypeScript)**  
+- React (UI)  
+- FingerprintJS (Device fingerprint)  
+- Axios (API calls)  
+- React Router (Navigation)  
 
-# Step 3: Install the necessary dependencies.
-npm i
+**Backend (Node.js + TypeScript)**  
+- Express.js
+- JWT Authentication / AWS Cognito  
+- Policy Engine (custom rule evaluator)  
+- AWS SDK v3 (S3, DynamoDB, SES/SNS)  
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+**AWS Cloud Services**  
+- **Amazon S3** → File storage  
+- **Amazon DynamoDB** → Policies, logs, metadata  
+- **AWS Lambda** (optional) → Policy evaluation serverless functions  
+- **Amazon Cognito** → Authentication & Authorization  
+- **Amazon SES/SNS** → OTP for step-up authentication  
+- **Amazon WAF & GuardDuty** → Threat detection & request filtering  
+- **Amazon CloudWatch** → Logging & monitoring  
 
-**Edit a file directly in GitHub**
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/addc14d0-9326-4c18-944e-9379ace2e15b) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)

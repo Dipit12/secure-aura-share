@@ -112,23 +112,35 @@ export const DemoSection = () => {
 
             <div>
               <h4 className="font-medium mb-2">Result</h4>
-              <Badge
-                variant={result.validation.allowed ? 'default' : 'destructive'}
-                className={result.validation.allowed ? 'bg-success' : ''}
-              >
-                {result.validation.allowed
-                  ? result.validation.requireStepUp
-                    ? 'Allowed (Step-up Required)'
-                    : 'Allowed'
-                  : 'Denied'}
-              </Badge>
-              {result.validation.violations.length > 0 && (
-                <ul className="mt-2 space-y-1 text-xs text-destructive">
-                  {result.validation.violations.map((v: string, i: number) => (
-                    <li key={i}>• {v}</li>
-                  ))}
-                </ul>
-              )}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Badge
+                    variant={result.validation.allowed ? 'default' : 'destructive'}
+                    className={result.validation.allowed ? 'bg-success' : ''}
+                  >
+                    {result.validation.allowed
+                      ? result.validation.requireStepUp
+                        ? 'Allowed (Step-up Required)'
+                        : 'Allowed'
+                      : 'Denied'}
+                  </Badge>
+                  {result.validation.riskScore !== undefined && (
+                    <Badge variant="outline" className="font-mono text-xs">
+                      Risk Score: {result.validation.riskScore}/100
+                    </Badge>
+                  )}
+                </div>
+                {result.validation.reason && (
+                  <p className="text-xs text-muted-foreground">{result.validation.reason}</p>
+                )}
+                {result.validation.violations.length > 0 && (
+                  <ul className="mt-2 space-y-1 text-xs text-destructive">
+                    {result.validation.violations.map((v: string, i: number) => (
+                      <li key={i}>• {v}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </div>
           </div>
         )}

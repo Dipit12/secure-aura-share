@@ -142,9 +142,25 @@ VITE_AWS_S3_BUCKET=your-secureshare-bucket
 VITE_AWS_DYNAMODB_FILES_TABLE=caac-files
 VITE_AWS_DYNAMODB_LOGS_TABLE=caac-logs
 VITE_AWS_DYNAMODB_POLICIES_TABLE=caac-policies
+
+# SES (Simple Email Service) - for OTP via email
+VITE_AWS_SES_SENDER_EMAIL=noreply@yourdomain.com
+
+# SNS (Simple Notification Service) - for OTP via SMS
+# No additional configuration needed - uses phone numbers directly
 ```
 
 **Note:** Make sure `.env` is in your `.gitignore` file to avoid committing sensitive credentials.
+
+### SES Setup (for email OTP)
+1. Verify your sender email address in AWS SES console
+2. If in sandbox mode, also verify recipient email addresses
+3. Request production access for unrestricted sending
+
+### SNS Setup (for SMS OTP)
+1. Ensure your AWS account has SMS sending enabled
+2. Check SMS spending limits in SNS settings
+3. Phone numbers should be in E.164 format (e.g., +11234567890)
 
 ## Step 5: Test the Setup
 

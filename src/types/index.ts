@@ -49,4 +49,5 @@ export interface ValidationResult {
   requireStepUp: boolean;
   reason?: string;
   violations: string[];
+  riskScore?: number; // 0-100 risk score
 }

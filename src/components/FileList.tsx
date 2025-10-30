@@ -220,20 +220,32 @@ export const FileList = ({ refreshTrigger }: FileListProps) => {
               {validationResult && (
                 <div>
                   <h4 className="font-medium mb-2">Access Validation</h4>
-                  <Badge variant={validationResult.allowed ? 'default' : 'destructive'}>
-                    {validationResult.allowed
-                      ? validationResult.requireStepUp
-                        ? 'Allowed (Step-up required)'
-                        : 'Allowed'
-                      : 'Denied'}
-                  </Badge>
-                  {validationResult.violations.length > 0 && (
-                    <ul className="mt-2 space-y-1 text-sm text-destructive">
-                      {validationResult.violations.map((v, i) => (
-                        <li key={i}>• {v}</li>
-                      ))}
-                    </ul>
-                  )}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Badge variant={validationResult.allowed ? 'default' : 'destructive'}>
+                        {validationResult.allowed
+                          ? validationResult.requireStepUp
+                            ? 'Allowed (Step-up required)'
+                            : 'Allowed'
+                          : 'Denied'}
+                      </Badge>
+                      {validationResult.riskScore !== undefined && (
+                        <Badge variant="outline" className="font-mono">
+                          Risk Score: {validationResult.riskScore}/100
+                        </Badge>
+                      )}
+                    </div>
+                    {validationResult.reason && (
+                      <p className="text-sm text-muted-foreground">{validationResult.reason}</p>
+                    )}
+                    {validationResult.violations.length > 0 && (
+                      <ul className="mt-2 space-y-1 text-sm text-destructive">
+                        {validationResult.violations.map((v, i) => (
+                          <li key={i}>• {v}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 </div>
               )}
 

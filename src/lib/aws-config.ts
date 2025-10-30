@@ -15,6 +15,12 @@ export const AWS_CONFIG = {
     logsTable: import.meta.env.VITE_AWS_DYNAMODB_LOGS_TABLE || 'caac-logs',
     policiesTable: import.meta.env.VITE_AWS_DYNAMODB_POLICIES_TABLE || 'caac-policies',
   },
+  ses: {
+    senderEmail: import.meta.env.VITE_AWS_SES_SENDER_EMAIL || 'noreply@example.com',
+  },
+  sns: {
+    // SNS uses phone numbers directly, no additional config needed
+  },
 };
 
 // Check if AWS is configured

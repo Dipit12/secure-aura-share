@@ -59,37 +59,76 @@ class ContextService {
   }
 
   validateAccess(context: AccessContext, policy: AccessPolicy): ValidationResult {
+    let score = 0;
     const violations: string[] = [];
-    let requireStepUp = policy.requireStepUp;
-
-    // Check country
-    if (policy.allowedCountries.length > 0 && !policy.allowedCountries.includes(context.country)) {
-      violations.push(`Access from ${context.country} is not allowed`);
+    
+    // Country check (40 points)
+    if (policy.allowedCountries.length > 0) {
+      if (policy.allowedCountries.includes(context.country)) {
+        score += 40;
+      } else {
+        violations.push(`Access from ${context.country} is not allowed`);
+      }
+    } else {
+      // If no country restriction, give full points
+      score += 40;
     }
-
-    // Check time window
+    
+    // Trusted device check (40 points)
+    if (policy.trustedDevices.length > 0) {
+      if (policy.trustedDevices.includes(context.deviceId)) {
+        score += 40;
+      } else {
+        violations.push('Device not recognized as trusted');
+      }
+    } else {
+      // If no device restriction, give full points
+      score += 40;
+    }
+    
+    // Time window check (20 points)
     if (policy.allowedTimeStart && policy.allowedTimeEnd) {
       const now = new Date(context.timestamp);
       const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
       
-      if (currentTime < policy.allowedTimeStart || currentTime > policy.allowedTimeEnd) {
+      if (currentTime >= policy.allowedTimeStart && currentTime <= policy.allowedTimeEnd) {
+        score += 20;
+      } else {
         violations.push(`Access allowed only between ${policy.allowedTimeStart} and ${policy.allowedTimeEnd}`);
       }
+    } else {
+      // If no time restriction, give full points
+      score += 20;
     }
-
-    // Check trusted devices
-    if (policy.trustedDevices.length > 0 && !policy.trustedDevices.includes(context.deviceId)) {
-      violations.push('Device not recognized as trusted');
-      requireStepUp = true; // Force step-up for unknown devices
+    
+    // Determine access based on risk score
+    let allowed = false;
+    let requireStepUp = false;
+    let reason = '';
+    
+    if (score >= 80) {
+      // High trust - allow access
+      allowed = true;
+      requireStepUp = false;
+      reason = `Access granted - High trust score (${score}/100)`;
+    } else if (score >= 50) {
+      // Medium trust - require step-up authentication
+      allowed = true;
+      requireStepUp = true;
+      reason = `Step-up authentication required - Medium trust score (${score}/100)`;
+    } else {
+      // Low trust - deny access
+      allowed = false;
+      requireStepUp = false;
+      reason = `Access denied - Low trust score (${score}/100)`;
     }
-
-    const allowed = violations.length === 0;
 
     return {
       allowed,
-      requireStepUp: !allowed ? false : requireStepUp, // Only require step-up if access would be allowed
-      reason: violations.join('; '),
+      requireStepUp,
+      reason,
       violations,
+      riskScore: score,
     };
   }
 

@@ -62,10 +62,7 @@ For example:
 **AWS Cloud Services**  
 - **Amazon S3** → File storage  
 - **Amazon DynamoDB** → Policies, logs, metadata  
-- **AWS Lambda** (optional) → Policy evaluation serverless functions  
-- **Amazon Cognito** → Authentication & Authorization  
 - **Amazon SES/SNS** → OTP for step-up authentication  
-- **Amazon WAF & GuardDuty** → Threat detection & request filtering  
 - **Amazon CloudWatch** → Logging & monitoring  
 
 
